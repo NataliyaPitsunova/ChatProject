@@ -21,7 +21,7 @@ public class Server {
     private final AuthService authService;
     private final ExecutorService executorService;
     private List<ClientHandler> connectedUsers;
-    public static Logger LOGGER = LogManager.getLogger(Server.class);
+    public static Logger LOGGER = LogManager.getLogger(Server.class);       //logger hw3-6-3*
 
 
     public Server() {
@@ -31,13 +31,13 @@ public class Server {
             authService.start();
             connectedUsers = new ArrayList<>();
             while (true) {
-                LOGGER.info("Сервер ожидает подключения");
+                LOGGER.info("Сервер ожидает подключения");          //logger hw3-6-3*
                 Socket socket = serverSocket.accept();
-                LOGGER.info("Клиент подключился");
+                LOGGER.info("Клиент подключился");                  //logger hw3-6-3*
                 new ClientHandler(executorService,this, socket);
                             }
         } catch (IOException exception) {
-            LOGGER.error("Ошибка в работе сервера",exception);
+            LOGGER.error("Ошибка в работе сервера",exception);          //logger hw3-6-3*
         } finally {
             if (authService != null) {
                 authService.end();

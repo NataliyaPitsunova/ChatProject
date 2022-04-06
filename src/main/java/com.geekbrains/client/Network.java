@@ -59,7 +59,7 @@ public class Network {
                         }
                     }
                 } catch (IOException exception) {
-                    Server.LOGGER.error(exception);
+                    Server.LOGGER.error(exception);         //logger hw3-6-3*
                 }
             }
         }).start();
@@ -76,7 +76,7 @@ public class Network {
         try {
             outputStream.writeUTF(message);
         } catch (IOException exception) {
-            Server.LOGGER.error(exception);
+            Server.LOGGER.error(exception);             //logger hw3-6-3*
         }
     }
 
@@ -92,7 +92,7 @@ public class Network {
             }
             return authenticated;
         } catch (IOException e) {
-            Server.LOGGER.error(e);
+            Server.LOGGER.error(e);             //logger hw3-6-3*
         }
         return false;
     }
@@ -104,7 +104,7 @@ public class Network {
             inputStream.close();
             socket.close();
         } catch (IOException exception) {
-            Server.LOGGER.error(exception);
+            Server.LOGGER.error(exception);             //logger hw3-6-3*
         }
 
         System.exit(1);

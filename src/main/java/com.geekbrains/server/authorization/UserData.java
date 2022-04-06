@@ -25,7 +25,7 @@ public class UserData {
         return nickName;
     }
 
-    public void info() {
+    public void info() {            //logger hw3-6-3*
         Server.LOGGER.info("логин: " + this.login +  " ; пароль: "+ this.password + " ; никнейм:" + this.nickName);
     }
 }

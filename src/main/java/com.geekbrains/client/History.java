@@ -49,7 +49,7 @@ public class History implements Serializable {
                 fIS.close();
                 oIS.close();
             } catch (IOException | ClassNotFoundException e) {
-                Server.LOGGER.error(e);
+                Server.LOGGER.error(e);     //logger hw3-6-3*
             }
         /*    for (String message : this.list) {
                 System.out.println(message);

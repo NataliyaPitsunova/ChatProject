@@ -40,7 +40,7 @@ public class ClientHandler {
                         readMessages();
 
                     } catch (IOException exception) {
-                        Server.LOGGER.error(exception);
+                        Server.LOGGER.error(exception);             //logger hw3-6-3*
                     }
                 }
             }).start();
@@ -102,7 +102,7 @@ public class ClientHandler {
             bufferedWriter.close();
 
         } catch (IOException e) {
-            Server.LOGGER.error(e);
+            Server.LOGGER.error(e);         //logger hw3-6-3*
         }
     }
 
@@ -113,7 +113,7 @@ public class ClientHandler {
             //добавляем в историю
             saveHistory(message);
         } catch (IOException | ClassNotFoundException exception) {
-            Server.LOGGER.error(exception);
+            Server.LOGGER.error(exception);         //logger hw3-6-3*
         }
     }
 
@@ -125,7 +125,7 @@ public class ClientHandler {
             inputStream.close();
             socket.close();
         } catch (IOException exception) {
-            Server.LOGGER.error(exception);
+            Server.LOGGER.error(exception);             //logger hw3-6-3*
         }
     }
 

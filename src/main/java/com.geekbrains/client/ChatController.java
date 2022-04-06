@@ -78,7 +78,7 @@ public class ChatController implements Initializable {
                         history.addMessage(text);
                         history.serialize();
                     } catch (IOException e) {
-                        Server.LOGGER.error(e);
+                        Server.LOGGER.error(e);         //logger hw3-6-3*
                     }
                 }
                 if (text.contains(" private ")) {
@@ -132,7 +132,7 @@ public class ChatController implements Initializable {
                     }
                 }
             } catch (EOFException e) {
-                Server.LOGGER.error(e);
+                Server.LOGGER.error(e);             //logger hw3-6-3*
             }
         }
     }
@@ -164,8 +164,7 @@ public class ChatController implements Initializable {
         try {
             JdbcApp.updateEx(lastNick, newNick);
         } catch (SQLException e) {
-            Server.LOGGER.error(e);
-            Server.LOGGER.error("ошибка обновления ника");
+            Server.LOGGER.error("ошибка обновления ника", e);           //logger hw3-6-3*
         }
     }
 
