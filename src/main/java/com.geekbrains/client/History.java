@@ -31,7 +31,7 @@ public class History implements Serializable {
         return list;
     }
 
-    public void serialize() throws IOException, NoClassDefFoundError {
+   /* public void serialize() throws IOException, NoClassDefFoundError {
         try (
                 FileOutputStream fOS = new FileOutputStream(path, false);
                 ObjectOutputStream oOS = new ObjectOutputStream(fOS)) {
@@ -51,11 +51,11 @@ public class History implements Serializable {
             } catch (IOException | ClassNotFoundException e) {
                 Server.LOGGER.error(e);     //logger hw3-6-3*
             }
-        /*    for (String message : this.list) {
+        *//*    for (String message : this.list) {
                 System.out.println(message);
-            }*/
+            }*//*
         }
         return null;
-    }
+    }*/
 
 }

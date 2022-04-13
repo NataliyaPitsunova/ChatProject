@@ -17,8 +17,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+
 
 public class ChatController implements Initializable {
     @FXML
@@ -34,10 +33,11 @@ public class ChatController implements Initializable {
     @FXML
     public HBox changeNickPanel;
 
-    private String path = "serverHistory.txt";
-    private File file = new File(path);
+    private final String path = "serverHistory.txt";
+    private final File file = new File(path);
     private ArrayList<String> historySrv = new ArrayList<String>();
     private History history;
+    private File historyClient;
 
     private final Network network;
 
@@ -68,20 +68,19 @@ public class ChatController implements Initializable {
             public void run() {
                 int oldText = textArea.getLength() + 1;
                 String[] newText = text.split(" ");
-                int selectText = oldText + newText[0].length() + newText[1].length() + 1;
-                if (textArea.getText().isEmpty()) {
-                    textArea.setText(text);
-                } else {
-                    textArea.setText(textArea.getText() + "\n" + text);
-                    //сериализация истории
-                    try {
-                        history.addMessage(text);
-                        history.serialize();
-                    } catch (IOException e) {
-                        Server.LOGGER.error(e);         //logger hw3-6-3*
+                int selectText = oldText + newText[0].length() + newText[1].length() + 2;
+                try {
+                    saveToFile(text);
+                    if (textArea.getText().isEmpty()) {
+                        textArea.setText(text);
+                    } else {
+                        textArea.setText(textArea.getText() + "\n" + text);
                     }
+                } catch (IOException e) {
+                    Server.LOGGER.error(e);         //logger hw3-6-3*
                 }
-                if (text.contains(" private ")) {
+
+                if (text.contains("private")) {
                     textArea.selectRange(oldText, selectText);
                 }
             }
@@ -112,28 +111,17 @@ public class ChatController implements Initializable {
     public void sendAuth(ActionEvent event) throws IOException, RuntimeException {
         boolean authenticated = network.sendAuth(loginField.getText(), passwordField.getText());
         if (authenticated) {
+            //создаем файл хистори для клиента при входе
+            String pathToFile = "history_" + loginField.getText() + ".txt";
+            historyClient = new File(pathToFile);
+            if (!historyClient.exists()) {
+                historyClient.createNewFile();
+            }
+
             loginField.clear();
             passwordField.clear();
             setAuthenticated(true);
-//3.2 десериализация из файла истории при входе в чат
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            history = new History(file, path, historySrv);
-            try {
-                history.deserialize();
-                historySrv = history.getMessage();
-                for (String hstry : historySrv
-                ) {
-                    if (!(textArea.getText().isEmpty())) {
-                        textArea.setText(textArea.getText() + "\n" + hstry);
-                    } else {
-                        textArea.setText(hstry);
-                    }
-                }
-            } catch (EOFException e) {
-                Server.LOGGER.error(e);             //logger hw3-6-3*
-            }
+            readFromHistoryTxt();
         }
     }
 
@@ -191,9 +179,55 @@ public class ChatController implements Initializable {
         changeNickPanel.setVisible(false);
         changeNickPanel.setManaged(false);
         changeNickField.clear();
-
     }
 
+    public void saveToFile(String messageFromServer) throws IOException {
+        try {
+            PrintWriter fileWriter = new PrintWriter(new FileWriter(historyClient, true));
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write(messageFromServer + "\n");
+            bufferedWriter.close();
+        } catch
+        (IOException exception) {
+            Server.LOGGER.error(exception);             //logger hw3-6-3*
+        }
+    }
 
+    public void readFromHistoryTxt() {
+
+        try {
+            BufferedReader b = new BufferedReader(new FileReader(historyClient));
+            String readLine = "";
+            while ((readLine = b.readLine()) != null) {
+                historySrv.add(readLine);
+            }
+        } catch (IOException e) {
+            Server.LOGGER.error(e);
+        }
+     /*   for (String hstry : historySrv
+        ) {
+            if (!(textArea.getText().isEmpty())) {
+                textArea.setText(textArea.getText() + "\n" + hstry);
+            } else {
+                textArea.setText(hstry);
+            }
+        }*/
+        int first;
+        if (historySrv.size() >= 100) {
+            first = historySrv.size() - 100;
+        } else {
+            first = 0;
+        }
+        for (
+                int i = first; i < historySrv.size(); i++) {
+            {
+                if (!(textArea.getText().isEmpty())) {
+                    textArea.setText(textArea.getText() + "\n" + historySrv.get(i));
+                } else {
+                    textArea.setText(historySrv.get(i));
+                }
+            }
+        }
+    }
 }
 
