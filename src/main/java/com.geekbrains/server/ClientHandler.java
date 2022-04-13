@@ -18,9 +18,7 @@ public class ClientHandler {
     }
 
     private String nickName;
-    private String login;
 
-    private File historyClient;
 
     public String getNickName() {
         return nickName;
@@ -40,7 +38,7 @@ public class ClientHandler {
                         readMessages();
 
                     } catch (IOException exception) {
-                        Server.LOGGER.error(exception);
+                        Server.LOGGER.error(exception);             //logger hw3-6-3*
                     }
                 }
             }).start();
@@ -54,7 +52,6 @@ public class ClientHandler {
             String message = inputStream.readUTF();
             if (message.startsWith(ServerCommandConstants.AUTHENTICATION)) {
                 String[] authInfo = message.split(" ");
-                login = authInfo[1];
                 String nickName = server.getAuthService().getNickNameByLoginAndPassword(authInfo[1], authInfo[2]);
                 if (nickName != null) {
                     if (!server.isNickNameBusy(nickName)) {
@@ -90,30 +87,13 @@ public class ClientHandler {
         }
     }
 //сохранение истории пользователя
-    private void saveHistory(String message) throws IOException, ClassNotFoundException {
-        historyClient = new File("history_" + login + ".txt");
-        if (!historyClient.exists()) {
-            historyClient.createNewFile();
-        }
-        try {
-            PrintWriter fileWriter = new PrintWriter(new FileWriter(historyClient, true));
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            bufferedWriter.write(message + "\n");
-            bufferedWriter.close();
-
-        } catch (IOException e) {
-            Server.LOGGER.error(e);
-        }
-    }
 
 
     public void sendMessage(String message) throws IOException {
         try {
             outputStream.writeUTF(message);
-            //добавляем в историю
-            saveHistory(message);
-        } catch (IOException | ClassNotFoundException exception) {
-            Server.LOGGER.error(exception);
+        } catch (IOException  exception) {
+            Server.LOGGER.error(exception);         //logger hw3-6-3*
         }
     }
 
@@ -125,7 +105,7 @@ public class ClientHandler {
             inputStream.close();
             socket.close();
         } catch (IOException exception) {
-            Server.LOGGER.error(exception);
+            Server.LOGGER.error(exception);             //logger hw3-6-3*
         }
     }
 

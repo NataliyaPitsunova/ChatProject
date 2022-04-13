@@ -16,7 +16,7 @@ public class JdbcApp {
             connect();
             logins = findAll();
         } catch (SQLException e) {
-            Server.LOGGER.error(e);
+            Server.LOGGER.error(e);     //logger hw3-6-3*
         } finally {
             disconnect();
         }
@@ -28,14 +28,14 @@ public class JdbcApp {
                 statement.close();
             }
         } catch (SQLException e) {
-            Server.LOGGER.error(e);
+            Server.LOGGER.error(e);         //logger hw3-6-3*
         }
         try {
             if (connection != null) {
                 connection.close();
             }
         } catch (SQLException e) {
-            Server.LOGGER.error(e);
+            Server.LOGGER.error(e);         //logger hw3-6-3*
         }
     }
 
@@ -59,7 +59,7 @@ public class JdbcApp {
     private static void readEx() throws SQLException {
         try (ResultSet rs = statement.executeQuery("select * from auth ORDER BY login ASC ;")) {
             while (rs.next()) {
-                System.out.println(rs.getString("login") + " " + rs.getString("password") + " " +
+                Server.LOGGER.info(rs.getString("login") + " " + rs.getString("password") + " " +
                         rs.getString("nickname"));
             }
         }
@@ -80,7 +80,7 @@ public class JdbcApp {
             statement.executeUpdate("UPDATE auth SET nickname = '" + newName + "' WHERE nickname = '" + lastName + "';");
             readEx();
         } catch (SQLException e) {
-            Server.LOGGER.error(e);
+            Server.LOGGER.error(e);     //logger hw3-6-3*
         } finally {
             disconnect();
         }
