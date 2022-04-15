@@ -1,6 +1,7 @@
 package com.geekbrains.server;
 
 import com.geekbrains.client.ChatController;
+import com.geekbrains.client.Network;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,7 +17,7 @@ public class ClientHandler {
     public void setNickName(String nickName) {
         this.nickName = nickName;
     }
-
+    private static Logger LOGGER = LogManager.getLogger(ClientHandler.class);
     private String nickName;
 
 
@@ -38,7 +39,7 @@ public class ClientHandler {
                         readMessages();
 
                     } catch (IOException exception) {
-                        Server.LOGGER.error(exception);             //logger hw3-6-3*
+                        LOGGER.error(exception);             //logger hw3-6-3*
                     }
                 }
             }).start();
@@ -93,7 +94,7 @@ public class ClientHandler {
         try {
             outputStream.writeUTF(message);
         } catch (IOException  exception) {
-            Server.LOGGER.error(exception);         //logger hw3-6-3*
+            LOGGER.error(exception);         //logger hw3-6-3*
         }
     }
 
@@ -105,7 +106,7 @@ public class ClientHandler {
             inputStream.close();
             socket.close();
         } catch (IOException exception) {
-            Server.LOGGER.error(exception);             //logger hw3-6-3*
+            LOGGER.error(exception);             //logger hw3-6-3*
         }
     }
 

@@ -1,6 +1,8 @@
 package com.geekbrains.client;
 
 import com.geekbrains.server.Server;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -10,6 +12,7 @@ public class History implements Serializable {
     private static String path;
     private static File file;
     private static ArrayList<String> list;
+    private static Logger LOGGER = LogManager.getLogger(Server.class);
 
     public History(File file, String path, List<String> list) throws IOException {
         this.path = path;
@@ -18,7 +21,18 @@ public class History implements Serializable {
     }
 
 
-    public void addMessage(String message) {
+    public static void readFile(File historyClient, List historySrv ){
+        try {
+            BufferedReader b = new BufferedReader(new FileReader(historyClient));
+            String readLine = "";
+            while ((readLine = b.readLine()) != null) {
+                historySrv.add(readLine);
+            }
+        } catch (IOException e) {
+            LOGGER.error(e);
+        }
+    }
+  /*  public void addMessage(String message) {
         if (list.size() <= 100) {
             list.add(message);
         } else {
@@ -30,7 +44,7 @@ public class History implements Serializable {
     public ArrayList<String> getMessage() {
         return list;
     }
-
+*/
    /* public void serialize() throws IOException, NoClassDefFoundError {
         try (
                 FileOutputStream fOS = new FileOutputStream(path, false);

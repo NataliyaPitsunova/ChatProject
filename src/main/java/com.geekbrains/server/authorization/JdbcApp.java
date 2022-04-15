@@ -1,6 +1,9 @@
 package com.geekbrains.server.authorization;
 
+import com.geekbrains.server.ClientHandler;
 import com.geekbrains.server.Server;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,13 +13,14 @@ public class JdbcApp {
     private static Connection connection;
     private static Statement statement;
     public static List<UserData> logins;
+    private static Logger LOGGER = LogManager.getLogger(JdbcApp.class);
 
     public static void main() {
         try {
             connect();
             logins = findAll();
         } catch (SQLException e) {
-            Server.LOGGER.error(e);     //logger hw3-6-3*
+            LOGGER.error(e);     //logger hw3-6-3*
         } finally {
             disconnect();
         }
@@ -28,14 +32,14 @@ public class JdbcApp {
                 statement.close();
             }
         } catch (SQLException e) {
-            Server.LOGGER.error(e);         //logger hw3-6-3*
+            LOGGER.error(e);         //logger hw3-6-3*
         }
         try {
             if (connection != null) {
                 connection.close();
             }
         } catch (SQLException e) {
-            Server.LOGGER.error(e);         //logger hw3-6-3*
+            LOGGER.error(e);         //logger hw3-6-3*
         }
     }
 
@@ -59,7 +63,7 @@ public class JdbcApp {
     private static void readEx() throws SQLException {
         try (ResultSet rs = statement.executeQuery("select * from auth ORDER BY login ASC ;")) {
             while (rs.next()) {
-                Server.LOGGER.info(rs.getString("login") + " " + rs.getString("password") + " " +
+                LOGGER.info(rs.getString("login") + " " + rs.getString("password") + " " +
                         rs.getString("nickname"));
             }
         }
@@ -80,7 +84,7 @@ public class JdbcApp {
             statement.executeUpdate("UPDATE auth SET nickname = '" + newName + "' WHERE nickname = '" + lastName + "';");
             readEx();
         } catch (SQLException e) {
-            Server.LOGGER.error(e);     //logger hw3-6-3*
+            LOGGER.error(e);     //logger hw3-6-3*
         } finally {
             disconnect();
         }

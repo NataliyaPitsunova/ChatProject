@@ -3,6 +3,8 @@ package com.geekbrains.client;
 import com.geekbrains.CommonConstants;
 import com.geekbrains.server.Server;
 import com.geekbrains.server.ServerCommandConstants;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -19,7 +21,7 @@ public class Network {
     private String login;
 
     private File historyClient;
-
+    private static Logger LOGGER = LogManager.getLogger(Network.class);       //logger hw3-6-3*
     public Network(ChatController chatController) {
         this.controller = chatController;
     }
@@ -60,7 +62,7 @@ public class Network {
                         }
                     }
                 } catch (IOException exception) {
-                    Server.LOGGER.error(exception);         //logger hw3-6-3*
+                    LOGGER.error(exception);         //logger hw3-6-3*
                 }
             }
         }).start();
@@ -77,7 +79,7 @@ public class Network {
         try {
             outputStream.writeUTF(message);
         } catch (IOException exception) {
-            Server.LOGGER.error(exception);             //logger hw3-6-3*
+            LOGGER.error(exception);             //logger hw3-6-3*
         }
     }
 
@@ -93,7 +95,7 @@ public class Network {
             }
             return authenticated;
         } catch (IOException e) {
-            Server.LOGGER.error(e);             //logger hw3-6-3*
+            LOGGER.error(e);             //logger hw3-6-3*
         }
         return false;
     }
@@ -105,7 +107,7 @@ public class Network {
             inputStream.close();
             socket.close();
         } catch (IOException exception) {
-            Server.LOGGER.error(exception);             //logger hw3-6-3*
+            LOGGER.error(exception);             //logger hw3-6-3*
         }
 
         System.exit(1);

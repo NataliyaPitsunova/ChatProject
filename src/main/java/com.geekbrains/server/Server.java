@@ -21,7 +21,7 @@ public class Server {
     private final AuthService authService;
     private final ExecutorService executorService;
     private List<ClientHandler> connectedUsers;
-    public static Logger LOGGER = LogManager.getLogger(Server.class);       //logger hw3-6-3*
+    private static Logger LOGGER = LogManager.getLogger(Server.class);       //logger hw3-6-3*
 
 
     public Server() {

@@ -11,6 +11,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.net.URL;
@@ -38,7 +40,7 @@ public class ChatController implements Initializable {
     private ArrayList<String> historySrv = new ArrayList<String>();
     private History history;
     private File historyClient;
-
+    private static Logger LOGGER = LogManager.getLogger(ChatController.class);
     private final Network network;
 
     public ChatController() throws IOException {
@@ -77,7 +79,7 @@ public class ChatController implements Initializable {
                         textArea.setText(textArea.getText() + "\n" + text);
                     }
                 } catch (IOException e) {
-                    Server.LOGGER.error(e);         //logger hw3-6-3*
+                    LOGGER.error(e);         //logger hw3-6-3*
                 }
 
                 if (text.contains("private")) {
@@ -152,7 +154,7 @@ public class ChatController implements Initializable {
         try {
             JdbcApp.updateEx(lastNick, newNick);
         } catch (SQLException e) {
-            Server.LOGGER.error("ошибка обновления ника", e);           //logger hw3-6-3*
+            LOGGER.error("ошибка обновления ника", e);           //logger hw3-6-3*
         }
     }
 
@@ -189,29 +191,12 @@ public class ChatController implements Initializable {
             bufferedWriter.close();
         } catch
         (IOException exception) {
-            Server.LOGGER.error(exception);             //logger hw3-6-3*
+            LOGGER.error(exception);             //logger hw3-6-3*
         }
     }
 
     public void readFromHistoryTxt() {
-
-        try {
-            BufferedReader b = new BufferedReader(new FileReader(historyClient));
-            String readLine = "";
-            while ((readLine = b.readLine()) != null) {
-                historySrv.add(readLine);
-            }
-        } catch (IOException e) {
-            Server.LOGGER.error(e);
-        }
-     /*   for (String hstry : historySrv
-        ) {
-            if (!(textArea.getText().isEmpty())) {
-                textArea.setText(textArea.getText() + "\n" + hstry);
-            } else {
-                textArea.setText(hstry);
-            }
-        }*/
+        History.readFile(historyClient, historySrv);
         int first;
         if (historySrv.size() >= 100) {
             first = historySrv.size() - 100;

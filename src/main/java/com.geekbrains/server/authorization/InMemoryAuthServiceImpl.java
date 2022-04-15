@@ -12,7 +12,7 @@ import static com.geekbrains.server.authorization.JdbcApp.*;
 
 public class InMemoryAuthServiceImpl implements AuthService {
     public final Map<String, UserData> users;
-
+    private static Logger LOGGER = LogManager.getLogger(InMemoryAuthServiceImpl.class);
     //ИСПРАВЛЕН InMemoryAuthServiceImpl ОБРАЩАЕТСЯ к main методу класса jbdc
     public InMemoryAuthServiceImpl() {
         users = new HashMap<>();
@@ -24,7 +24,7 @@ public class InMemoryAuthServiceImpl implements AuthService {
 
     @Override
     public void start() {
-        Server.LOGGER.info("Сервис аутентификации инициализирован");   //logger hw3-6-3*
+        LOGGER.info("Сервис аутентификации инициализирован");   //logger hw3-6-3*
     }
 
     @Override
@@ -40,6 +40,6 @@ public class InMemoryAuthServiceImpl implements AuthService {
 
     @Override
     public void end() {
-        Server.LOGGER.info("Сервис аутентификации отключен");
+        LOGGER.info("Сервис аутентификации отключен");
     }       //logger hw3-6-3*
 }
