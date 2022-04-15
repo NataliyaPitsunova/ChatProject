@@ -21,7 +21,7 @@ public class Server {
     private final AuthService authService;
     private final ExecutorService executorService;
     private List<ClientHandler> connectedUsers;
-    public static Logger LOGGER = LogManager.getLogger(Server.class);
+    private static Logger LOGGER = LogManager.getLogger(Server.class);       //logger hw3-6-3*
 
 
     public Server() {
@@ -31,13 +31,13 @@ public class Server {
             authService.start();
             connectedUsers = new ArrayList<>();
             while (true) {
-                LOGGER.info("Сервер ожидает подключения");
+                LOGGER.info("Сервер ожидает подключения");          //logger hw3-6-3*
                 Socket socket = serverSocket.accept();
-                LOGGER.info("Клиент подключился");
-                new ClientHandler(executorService,this, socket);
-                            }
+                LOGGER.info("Клиент подключился");                  //logger hw3-6-3*
+                new ClientHandler(executorService, this, socket);
+            }
         } catch (IOException exception) {
-            LOGGER.error("Ошибка в работе сервера",exception);
+            LOGGER.error("Ошибка в работе сервера", exception);          //logger hw3-6-3*
         } finally {
             if (authService != null) {
                 authService.end();
@@ -59,6 +59,7 @@ public class Server {
         }
         return false;
     }
+
     //ДОБАВЛЕНО CHANGENICK ДЛЯ ИЗМЕНЕНИЯ В АРРЕЙЛИСТЕ  connectedUsers НИКНЕЙМА
     public synchronized void broadcastMessage(String message) throws IOException {
         LOGGER.info(message);
@@ -76,9 +77,13 @@ public class Server {
         for (ClientHandler handler : connectedUsers) {
             if (message.contains(ServerCommandConstants.PRIVATE)) {
                 String[] client = message.split(" ");
+                if (client[0].substring(0,client[0].length()-1).equals(handler.getNickName())) {
+                    handler.sendMessage(message);
+                    continue;
+                }
                 if (client[2].equals(handler.getNickName())) {
                     handler.sendMessage(message);
-                    break;
+                    continue;
                 }
             } else {
                 handler.sendMessage(message);
