@@ -33,17 +33,17 @@ public class Network {
                 try {
                     while (true) {
                         String messageFromServer = inputStream.readUTF();
-                        if (messageFromServer.startsWith(ServerCommandConstants.ENTER)) {
-                            String[] client = messageFromServer.split(" ");
-                            controller.displayClient(client[1]);
-                            controller.displayMessage("Пользователь " + client[1] + " зашел в чат");
+                        if (messageFromServer.startsWith(ServerCommandConstants.ENTER)) {       //java2.8
+                            String[] client = messageFromServer.split(" ");                 //java2.8
+                            controller.displayClient(client[1]);                                    //java2.8
+                            controller.displayMessage("Пользователь " + client[1] + " зашел в чат");        //java2.8
                         } else if (messageFromServer.startsWith(ServerCommandConstants.EXIT)) {
                             String[] client = messageFromServer.split(" ");
                             controller.removeClient(client[1]);
                             controller.displayMessage("Пользователь " + client[1] + " покинул чат");
-                        } else if (messageFromServer.contains(ServerCommandConstants.PRIVATE)) {
-                            String[] client = messageFromServer.split(" ", 4);
-                            controller.displayMessage(client[0] + " privateTo " + client[2] + " " + client[3]);
+                        } else if (messageFromServer.contains(ServerCommandConstants.PRIVATE)) {        //java2.8
+                            String[] client = messageFromServer.split(" ", 4);              //java2.8
+                            controller.displayMessage(client[0] + " privateTo " + client[2] + " " + client[3]);     //java2.8
                             // КОГДА ПРИХОДИТ СООБЩЕНИЕ С СЕРВЕРА CHANGENICK ВЫБИРАЕМ ОТТУДА СТАРЫЙ И НОВЫЙ НИК
                             // И ОТПРАВЛЯЕМ В ЧАТ КОНТРОЛЛЕР СТАРЫЙ И НОВЫЙ НИК
                         } else if (messageFromServer.contains(ServerCommandConstants.CHANGENICK)) {

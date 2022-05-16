@@ -75,7 +75,7 @@ public class Server {
         }
         //КОНЕЦ НОВОВВЕДЕНИЙ
         for (ClientHandler handler : connectedUsers) {
-            if (message.contains(ServerCommandConstants.PRIVATE)) {
+            if (message.contains(ServerCommandConstants.PRIVATE)) {             //java2.8
                 String[] client = message.split(" ");
                 if (client[0].substring(0,client[0].length()-1).equals(handler.getNickName())) {
                     handler.sendMessage(message);

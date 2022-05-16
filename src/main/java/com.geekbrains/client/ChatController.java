@@ -68,9 +68,9 @@ public class ChatController implements Initializable {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                int oldText = textArea.getLength() + 1;
-                String[] newText = text.split(" ");
-                int selectText = oldText + newText[0].length() + newText[1].length() + 2;
+                int oldText = textArea.getLength() + 1;         //java2.8
+                String[] newText = text.split(" ");     //java2.8
+                int selectText = oldText + newText[0].length() + newText[1].length() + 2;       //java2.8
                 try {
                     saveToFile(text);
                     if (textArea.getText().isEmpty()) {
@@ -82,7 +82,7 @@ public class ChatController implements Initializable {
                     LOGGER.error(e);         //logger hw3-6-3*
                 }
 
-                if (text.contains("private")) {
+                if (text.contains("private")) {         //java2.8
                     textArea.selectRange(oldText, selectText);
                 }
             }
@@ -137,7 +137,7 @@ public class ChatController implements Initializable {
         network.closeConnection();
     }
 
-    public void handleMouseClick(MouseEvent mouseEvent) {
+    public void handleMouseClick(MouseEvent mouseEvent) {               //java2.8
         String nickName = clientList.getSelectionModel().getSelectedItem();
         messageField.setText(ServerCommandConstants.PRIVATE + " " + nickName + " ");
     }

@@ -58,7 +58,7 @@ public class ClientHandler {
                     if (!server.isNickNameBusy(nickName)) {
                         sendAuthenticationMessage(true);
                         this.nickName = nickName;
-                        server.broadcastMessage(ServerCommandConstants.ENTER + " " + nickName);
+                        server.broadcastMessage(ServerCommandConstants.ENTER + " " + nickName); //java2.8
                         sendMessage(server.getClients());
                         server.addConnectedUser(this);
                         return;
