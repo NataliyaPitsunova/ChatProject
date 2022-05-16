@@ -3,13 +3,14 @@ package com.geekbrains.client;
 import com.geekbrains.CommonConstants;
 import com.geekbrains.server.Server;
 import com.geekbrains.server.ServerCommandConstants;
-import com.geekbrains.server.authorization.JdbcApp;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
-import java.sql.SQLException;
 
 public class Network {
     private Socket socket;
@@ -17,7 +18,10 @@ public class Network {
     private DataOutputStream outputStream;
 
     private final ChatController controller;
+    private String login;
 
+    private File historyClient;
+    private static Logger LOGGER = LogManager.getLogger(Network.class);       //logger hw3-6-3*
     public Network(ChatController chatController) {
         this.controller = chatController;
     }
@@ -29,18 +33,17 @@ public class Network {
                 try {
                     while (true) {
                         String messageFromServer = inputStream.readUTF();
-                        //Server.LOGGER.info(messageFromServer);
-                        if (messageFromServer.startsWith(ServerCommandConstants.ENTER)) {
-                            String[] client = messageFromServer.split(" ");
-                            controller.displayClient(client[1]);
-                            controller.displayMessage("Пользователь " + client[1] + " зашел в чат");
+                        if (messageFromServer.startsWith(ServerCommandConstants.ENTER)) {       //java2.8
+                            String[] client = messageFromServer.split(" ");                 //java2.8
+                            controller.displayClient(client[1]);                                    //java2.8
+                            controller.displayMessage("Пользователь " + client[1] + " зашел в чат");        //java2.8
                         } else if (messageFromServer.startsWith(ServerCommandConstants.EXIT)) {
                             String[] client = messageFromServer.split(" ");
                             controller.removeClient(client[1]);
                             controller.displayMessage("Пользователь " + client[1] + " покинул чат");
-                        } else if (messageFromServer.contains(ServerCommandConstants.PRIVATE)) {
-                            String[] client = messageFromServer.split(" ", 5);
-                            controller.displayMessage(client[0] + " private " + client[3] + client[4]);
+                        } else if (messageFromServer.contains(ServerCommandConstants.PRIVATE)) {        //java2.8
+                            String[] client = messageFromServer.split(" ", 4);              //java2.8
+                            controller.displayMessage(client[0] + " privateTo " + client[2] + " " + client[3]);     //java2.8
                             // КОГДА ПРИХОДИТ СООБЩЕНИЕ С СЕРВЕРА CHANGENICK ВЫБИРАЕМ ОТТУДА СТАРЫЙ И НОВЫЙ НИК
                             // И ОТПРАВЛЯЕМ В ЧАТ КОНТРОЛЛЕР СТАРЫЙ И НОВЫЙ НИК
                         } else if (messageFromServer.contains(ServerCommandConstants.CHANGENICK)) {
@@ -59,7 +62,7 @@ public class Network {
                         }
                     }
                 } catch (IOException exception) {
-                    Server.LOGGER.error(exception);
+                    LOGGER.error(exception);         //logger hw3-6-3*
                 }
             }
         }).start();
@@ -76,7 +79,7 @@ public class Network {
         try {
             outputStream.writeUTF(message);
         } catch (IOException exception) {
-            Server.LOGGER.error(exception);
+            LOGGER.error(exception);             //logger hw3-6-3*
         }
     }
 
@@ -92,7 +95,7 @@ public class Network {
             }
             return authenticated;
         } catch (IOException e) {
-            Server.LOGGER.error(e);
+            LOGGER.error(e);             //logger hw3-6-3*
         }
         return false;
     }
@@ -104,10 +107,11 @@ public class Network {
             inputStream.close();
             socket.close();
         } catch (IOException exception) {
-            Server.LOGGER.error(exception);
+            LOGGER.error(exception);             //logger hw3-6-3*
         }
 
         System.exit(1);
     }
+
 
 }
